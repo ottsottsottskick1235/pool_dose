@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0875d1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Pool Dose" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  
+  <title>Pool Dose</title>
+  <style>
+    :root {
+      --bg-1: #eaf7ff;
+      --bg-2: #f8fdff;
+      --card: rgba(255,255,255,.94);
+      --ink: #0e1f33;
+      --muted: #60738a;
+      --line: #d8e8f2;
+      --blue: #0875d1;
+      --blue-2: #064f9f;
+      --cyan: #00a6d6;
+      --green: #07834f;
+      --orange: #b86b00;
+      --red: #b92f34;
+      --soft-blue: #e9f5ff;
+      --soft-green: #e8f8ef;
+      --soft-orange: #fff4d8;
+      --soft-red: #ffe8ea;
+      --shadow: 0 22px 60px rgba(10, 45, 80, .14);
+      --radius: 28px;
+      --safe-top: env(safe-area-inset-top);
+      --safe-bottom: env(safe-area-inset-bottom);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg-1);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(0,166,214,.22), transparent 25rem),
+        radial-gradient(circle at 88% 12%, rgba(8,117,209,.16), transparent 30rem),
+        linear-gradient(180deg, var(--bg-2), var(--bg-1));
+      overflow-x: hidden;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: calc(20px + var(--safe-top)) 0 calc(34px + var(--safe-bottom));
+    }
+
+    .hero {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid var(--line);
+      color: var(--blue-2);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 28px rgba(10,45,80,.08);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.25rem, 12vw, 5rem);
+      line-height: .9;
+      letter-spacing: -.07em;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(.98rem, 3.5vw, 1.07rem);
+      line-height: 1.5;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 410px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(216,232,242,.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-title h2 {
+      margin: 0;
+      font-size: 1.04rem;
+      letter-spacing: -.025em;
+    }
+
+    .tiny-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--blue-2);
+      font-size: .74rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f7fbff;
+      padding: 13px 10px;
+      font-weight: 950;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .15s ease;
+      min-height: 48px;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, var(--blue-2), var(--blue));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 14px 28px rgba(8,117,209,.22);
+    }
+
+    form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: .9rem;
+      font-weight: 900;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: .79rem;
+      line-height: 1.35;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid #c8ddea;
+      background: #fbfeff;
+      color: var(--ink);
+      border-radius: 16px;
+      padding: 12px 13px;
+      font-size: 16px;
+      outline: none;
+      transition: .15s ease;
+      min-height: 48px;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(8,117,209,.14);
+      background: #fff;
+    }
+
+    .toggle {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: #f8fcff;
+    }
+
+    .toggle input {
+      width: auto;
+      min-height: auto;
+      margin-top: 3px;
+      scale: 1.2;
+    }
+
+    .right-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .main-result {
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      min-height: 330px;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 86% 18%, rgba(255,255,255,.24), transparent 10rem),
+        linear-gradient(135deg, #063f86, #0875d1 58%, #00a6d6);
+      color: white;
+      box-shadow: 0 28px 70px rgba(8,117,209,.28);
+      display: grid;
+      align-content: center;
+      gap: 13px;
+    }
+
+    .main-result:before {
+      content: "";
+      position: absolute;
+      inset: auto -5rem -8rem auto;
+      width: 18rem;
+      height: 18rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+    }
+
+    .result-kicker {
+      position: relative;
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      font-size: .78rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .amount {
+      position: relative;
+      font-size: clamp(3.15rem, 18vw, 6.7rem);
+      font-weight: 1000;
+      letter-spacing: -.09em;
+      line-height: .88;
+      overflow-wrap: anywhere;
+    }
+
+    .chemical {
+      position: relative;
+      font-size: clamp(1.12rem, 4.8vw, 1.35rem);
+      line-height: 1.28;
+      font-weight: 900;
+    }
+
+    .reason {
+      position: relative;
+      max-width: 650px;
+      opacity: .92;
+      line-height: 1.48;
+      font-size: .98rem;
+    }
+
+    .instruction-card {
+      padding: 16px;
+    }
+
+    .instruction-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .instruction-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: -.02em;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 11px;
+      align-items: start;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfeff;
+    }
+
+    .num {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--soft-blue);
+      color: var(--blue-2);
+      display: grid;
+      place-items: center;
+      font-weight: 1000;
+      flex: none;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .step span {
+      color: var(--muted);
+      line-height: 1.38;
+      font-size: .92rem;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .status {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      padding: 14px;
+      min-height: 116px;
+    }
+
+    .status strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .status span {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.38;
+    }
+
+    .good { background: var(--soft-green); border-color: #bfe8cf; }
+    .warn { background: var(--soft-orange); border-color: #efd08a; }
+    .bad { background: var(--soft-red); border-color: #f1b9bd; }
+    .info { background: var(--soft-blue); border-color: #bedcf5; }
+
+    .note {
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid #ecd494;
+      background: #fff7dc;
+      color: #664800;
+      line-height: 1.45;
+      font-size: .95rem;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: .85rem;
+      line-height: 1.45;
+      padding-bottom: 4px;
+    }
+
+    @media (max-width: 960px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap {
+        width: min(100% - 18px, 1120px);
+        padding-top: calc(14px + var(--safe-top));
+      }
+
+      .hero {
+        margin-bottom: 14px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .main-result {
+        padding: 22px;
+        min-height: 280px;
+        border-radius: 28px;
+      }
+
+      .card {
+        border-radius: 24px;
+      }
+
+      .card-body {
+        padding: 14px;
+      }
+
+      .mode-tabs {
+        position: sticky;
+        top: calc(8px + var(--safe-top));
+        z-index: 5;
+        background: rgba(234,247,255,.75);
+        backdrop-filter: blur(12px);
+        padding: 4px;
+        border-radius: 22px;
+        margin-left: -4px;
+        margin-right: -4px;
+      }
+
+      .tab {
+        min-height: 46px;
+        padding: 11px 8px;
+      }
+
+      .step {
+        grid-template-columns: 30px 1fr;
+        gap: 10px;
+      }
+
+      .num {
+        width: 30px;
+        height: 30px;
+        border-radius: 11px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .wrap {
+        width: min(100% - 14px, 1120px);
+      }
+
+      .badge {
+        font-size: .7rem;
+      }
+
+      .main-result {
+        padding: 18px;
+      }
+
+      .amount {
+        font-size: clamp(2.65rem, 17vw, 4rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="badge">Pool Dose</div>
+      <h1>What do I add?</h1>
+      <p class="subtitle">
+        Pick normal raise or shock, choose liquid or solid chlorine, and get a clear dose plus simple adding instructions.
+      </p>
+    </section>
+
+    <section class="app">
+      <aside class="card">
+        <div class="card-title">
+          <h2>Inputs</h2>
+          <span class="tiny-pill">61,000 L default</span>
+        </div>
+
+        <div class="card-body">
+          <div class="mode-tabs">
+            <button class="tab active" type="button" id="normalTab">Normal raise</button>
+            <button class="tab" type="button" id="shockTab">Shock estimate</button>
+          </div>
+
+          <form>
+            <div class="field">
+              <label for="volume">Pool volume, litres</label>
+              <input id="volume" type="number" min="1" step="1" value="61000" inputmode="decimal" />
+              <div class="hint">Use actual water volume if the pool is not at normal water level.</div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="type">Chlorine type</label>
+                <select id="type">
+                  <option value="liquid">Liquid chlorine</option>
+                  <option value="solid">Solid chlorine</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="strength">Strength, percent</label>
+                <input id="strength" type="number" min="0.1" max="100" step="0.1" value="12" inputmode="decimal" />
+                <div class="hint">12% liquid, 67% cal hypo, 56 to 62% dichlor.</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="fc">Current free chlorine</label>
+                <input id="fc" type="number" min="0" step="0.01" value="0.8" inputmode="decimal" />
+              </div>
+
+              <div class="field">
+                <label for="target">Target chlorine</label>
+                <input id="target" type="number" min="0" step="0.1" value="2.0" inputmode="decimal" />
+                <div class="hint">Shock mode uses this as the minimum target.</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="tc">Total chlorine</label>
+                <input id="tc" type="number" min="0" step="0.01" value="1.1" inputmode="decimal" />
+                <div class="hint">Used to estimate combined chlorine.</div>
+              </div>
+
+              <div class="field">
+                <label for="bucket">Bucket water, L</label>
+                <input id="bucket" type="number" min="1" step="0.5" value="10" inputmode="decimal" />
+                <div class="hint">Only used for solid chlorine.</div>
+              </div>
+            </div>
+
+            <div class="toggle">
+              <input id="stabilized" type="checkbox" checked />
+              <div>
+                <label for="stabilized">Outdoor or stabilized pool</label>
+                <div class="hint">Use this if cyanuric acid is present.</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="ph">pH</label>
+                <input id="ph" type="number" min="0" max="14" step="0.01" value="7.5" inputmode="decimal" />
+              </div>
+
+              <div class="field">
+                <label for="ta">Alkalinity</label>
+                <input id="ta" type="number" min="0" step="1" value="90" inputmode="decimal" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="taTarget">Alkalinity target</label>
+              <input id="taTarget" type="number" min="0" step="1" value="100" inputmode="decimal" />
+              <div class="hint">Used for sodium bicarbonate estimate if alkalinity is low.</div>
+            </div>
+          </form>
+        </div>
+      </aside>
+
+      <section class="right-stack">
+        <div class="main-result">
+          <div class="result-kicker" id="resultLabel">Add this</div>
+          <div class="amount" id="amount">0 mL</div>
+          <div class="chemical" id="chemical">of 12% liquid chlorine</div>
+          <div class="reason" id="reason">To raise free chlorine from 0.8 ppm to 2.0 ppm.</div>
+        </div>
+
+        <div class="card instruction-card">
+          <div class="instruction-header">
+            <h3>How to add it</h3>
+            <span class="tiny-pill" id="addTypePill">Liquid</span>
+          </div>
+          <div class="steps" id="steps"></div>
+        </div>
+
+        <div class="status-grid">
+          <div class="status" id="chlorineStatus">
+            <strong>Chlorine</strong>
+            <span id="chlorineText">Checking...</span>
+          </div>
+
+          <div class="status" id="phStatus">
+            <strong>pH</strong>
+            <span id="phText">Checking...</span>
+          </div>
+
+          <div class="status" id="taStatus">
+            <strong>Alkalinity</strong>
+            <span id="taText">Checking...</span>
+          </div>
+        </div>
+
+        <div class="note" id="note"></div>
+
+        <div class="footer">
+          Safety: never mix chlorine with acid, never mix different chlorine products, never add water into chemical, and do not dose while swimmers are in the pool. Follow your site procedure and product label.
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    let mode = "normal";
+
+    function n(id) {
+      const value = Number($(id).value);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function round(value, places = 2) {
+      const factor = Math.pow(10, places);
+      return Math.round(value * factor) / factor;
+    }
+
+    function liquid(mL) {
+      if (mL >= 1000) return `${round(mL / 1000, 2)} L`;
+      return `${round(mL, 0)} mL`;
+    }
+
+    function mass(g) {
+      if (g >= 1000) return `${round(g / 1000, 2)} kg`;
+      return `${round(g, 0)} g`;
+    }
+
+    function step(num, title, text) {
+      return `
+        <div class="step">
+          <div class="num">${num}</div>
+          <div>
+            <strong>${title}</strong>
+            <span>${text}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function setStatus(card, text, status, message) {
+      $(card).className = `status ${status}`;
+      $(text).textContent = message;
+    }
+
+    function doseCalc(volume, fc, target, type, strength) {
+      const raise = Math.max(target - fc, 0);
+      const availableG = volume * raise / 1000;
+
+      if (raise <= 0 || strength <= 0) {
+        return { raise, raw: 0, text: "Do not add", availableG };
+      }
+
+      if (type === "liquid") {
+        const mL = volume * raise / (10 * strength);
+        return { raise, raw: mL, text: liquid(mL), availableG };
+      }
+
+      const g = availableG / (strength / 100);
+      return { raise, raw: g, text: mass(g), availableG };
+    }
+
+    function saveInputs() {
+      const data = {};
+      document.querySelectorAll("input, select").forEach(el => {
+        data[el.id] = el.type === "checkbox" ? el.checked : el.value;
+      });
+      data.mode = mode;
+      localStorage.setItem("poolDoseInputs", JSON.stringify(data));
+    }
+
+    function loadInputs() {
+      try {
+        const data = JSON.parse(localStorage.getItem("poolDoseInputs") || "{}");
+        Object.entries(data).forEach(([id, value]) => {
+          if (id === "mode") {
+            mode = value === "shock" ? "shock" : "normal";
+            return;
+          }
+          const el = $(id);
+          if (!el) return;
+          if (el.type === "checkbox") el.checked = Boolean(value);
+          else el.value = value;
+        });
+      } catch {}
+    }
+
+    function calculate() {
+      const volume = n("volume");
+      const type = $("type").value;
+      const strength = n("strength");
+      const fc = n("fc");
+      const tc = n("tc");
+      const targetInput = n("target");
+      const bucket = Math.max(n("bucket"), 1);
+      const ph = n("ph");
+      const ta = n("ta");
+      const taTarget = n("taTarget");
+      const stabilized = $("stabilized").checked;
+
+      const cc = round(tc - fc, 2);
+      let target = targetInput;
+
+      if (mode === "shock") {
+        const breakpoint = cc > 0 ? cc * 10 : targetInput;
+        target = Math.max(targetInput, breakpoint);
+      }
+
+      const dose = doseCalc(volume, fc, target, type, strength);
+      const product = type === "liquid" ? `${strength}% liquid chlorine` : `${strength}% solid chlorine`;
+
+      $("resultLabel").textContent = mode === "shock" ? "Shock with this" : "Add this";
+      $("amount").textContent = dose.text;
+      $("chemical").textContent = dose.raise > 0 ? `of ${product}` : "chlorine is already at target";
+      $("reason").textContent = dose.raise > 0
+        ? `This raises free chlorine by ${round(dose.raise, 2)} ppm, from ${round(fc, 2)} ppm to ${round(target, 2)} ppm.`
+        : `Current free chlorine is ${round(fc, 2)} ppm. Target is ${round(target, 2)} ppm. No chlorine dose is needed.`;
+
+      let steps = "";
+      if (type === "liquid") {
+        $("addTypePill").textContent = "Liquid";
+        steps += step(1, "Measure the chlorine", `Measure ${dose.text} of ${product}.`);
+        steps += step(2, "Add to pool", "Pour slowly around the pool edge or in front of return flow while the pump is running.");
+        steps += step(3, "Circulate and retest", "Keep swimmers out during dosing. Let it mix, then retest according to site procedure.");
+      } else {
+        $("addTypePill").textContent = "Solid";
+        const grams = dose.raw;
+        const buckets = grams > 0 ? Math.ceil(grams / 450) : 0;
+        const perBucket = buckets > 0 ? grams / buckets : 0;
+
+        steps += step(1, "Use water first", `Fill ${buckets || 1} clean bucket${buckets === 1 ? "" : "s"} with ${bucket} L of water each.`);
+        steps += step(2, "Add chlorine to water", grams > 0
+          ? `Add about ${mass(perBucket)} of solid chlorine into each bucket. Never pour water into dry chemical.`
+          : "No chlorine increase is needed, so no bucket mix is needed.");
+        steps += step(3, "Pour into pool", "After dissolving as much as the label allows, pour around the pool edge or near return flow with the pump running.");
+      }
+      $("steps").innerHTML = steps;
+
+      const minFc = stabilized ? 1.0 : 0.5;
+      if (fc < minFc) {
+        setStatus("chlorineStatus", "chlorineText", "bad", `Low. Minimum warning is ${minFc.toFixed(1)} ppm.`);
+      } else if (fc < 2) {
+        setStatus("chlorineStatus", "chlorineText", "warn", "Usable but low. Practical target is usually around 2 to 4 ppm.");
+      } else if (fc > 10) {
+        setStatus("chlorineStatus", "chlorineText", "bad", "High. Do not reopen unless procedure says safe.");
+      } else {
+        setStatus("chlorineStatus", "chlorineText", "good", "Good range.");
+      }
+
+      if (ph < 7.2) {
+        setStatus("phStatus", "phText", "bad", "Low. Raise pH using site procedure or product label.");
+      } else if (ph > 7.8) {
+        setStatus("phStatus", "phText", "bad", "High. Chlorine works worse at high pH.");
+      } else if (ph < 7.4 || ph > 7.6) {
+        setStatus("phStatus", "phText", "warn", "In range, but ideal is about 7.4 to 7.6.");
+      } else {
+        setStatus("phStatus", "phText", "good", "Ideal range.");
+      }
+
+      if (ta < 60) {
+        setStatus("taStatus", "taText", "bad", "Very low. pH may swing easily.");
+      } else if (ta > 180) {
+        setStatus("taStatus", "taText", "bad", "Very high. Scaling and pH problems possible.");
+      } else if (ta < 80 || ta > 120) {
+        setStatus("taStatus", "taText", "warn", "Acceptable broad range, but 80 to 120 ppm is better.");
+      } else {
+        setStatus("taStatus", "taText", "good", "Good range.");
+      }
+
+      const taChange = taTarget - ta;
+      const bicarbKg = taChange > 0
+        ? (1.4 * 0.45359237) * (volume / 37854.11784) * (taChange / 10)
+        : 0;
+
+      let note = "";
+      if (taChange > 0) {
+        note += `Alkalinity: add about ${round(bicarbKg, 2)} kg sodium bicarbonate to raise TA from ${round(ta, 0)} ppm to ${round(taTarget, 0)} ppm. `;
+      } else if (taChange < 0) {
+        note += "Alkalinity is above target. Lowering alkalinity uses acid, so follow site procedure instead of blind dosing. ";
+      } else {
+        note += "No alkalinity dose needed for the selected target. ";
+      }
+
+      if (cc >= 0.5) {
+        note += `Combined chlorine is ${cc} ppm. Shock or corrective procedure may be needed.`;
+      } else if (cc >= 0.2) {
+        note += `Combined chlorine is ${cc} ppm. Watch it and retest.`;
+      } else if (cc < 0) {
+        note += "Total chlorine is lower than free chlorine. Retest because that reading does not make sense.";
+      } else {
+        note += `Combined chlorine is ${cc} ppm. That looks fine.`;
+      }
+
+      $("note").textContent = note;
+      saveInputs();
+    }
+
+    function setMode(newMode) {
+      mode = newMode;
+      $("normalTab").classList.toggle("active", mode === "normal");
+      $("shockTab").classList.toggle("active", mode === "shock");
+
+      if (mode === "shock" && n("target") < 5) $("target").value = 5;
+      if (mode === "normal" && n("target") === 5) $("target").value = 2;
+
+      calculate();
+    }
+
+    $("normalTab").addEventListener("click", () => setMode("normal"));
+    $("shockTab").addEventListener("click", () => setMode("shock"));
+
+    $("type").addEventListener("change", () => {
+      $("strength").value = $("type").value === "liquid" ? 12 : 67;
+      calculate();
+    });
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", calculate);
+      el.addEventListener("change", calculate);
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+
+    loadInputs();
+    setMode(mode);
+    calculate();
+  </script>
+</body>
+</html>
